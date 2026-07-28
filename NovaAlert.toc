@@ -1,0 +1,9 @@
+## Interface: 30300
+## Title: |cff00aaffNova|r|cffff3333Alert|r
+## Notes: Automatically announces crowd control effects and important combat events.
+## Author: Royal-Saphyre
+## Version: 1.0.0
+
+Core.lua
+Events.lua
+Config.lua
