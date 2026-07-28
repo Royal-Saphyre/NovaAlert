@@ -2,6 +2,7 @@
 -- NovaAlert
 -- File: Events.lua
 -- Purpose: Combat event detection
+-- Supports: WotLK 3.3.5a / Ascension
 --=============================================================================
 
 local EventFrame = CreateFrame("Frame")
@@ -65,6 +66,12 @@ local function Announce(message)
             "PARTY"
         )
 
+    else
+
+        DEFAULT_CHAT_FRAME:AddMessage(
+            "|cff00aaffNova|r|cffffffffAlert|r: "..message
+        )
+
     end
 
 end
@@ -75,6 +82,13 @@ end
 ------------------------------------------------
 
 local function CombatEvent()
+
+    -- Check if addon is disabled
+
+    if NovaAlert.Enabled == false then
+        return
+    end
+
 
     local timestamp,
     event,
@@ -91,13 +105,20 @@ local function CombatEvent()
     spellName = CombatLogGetCurrentEventInfo()
 
 
+
+    ------------------------------------------------
+    -- Aura Applied
+    ------------------------------------------------
+
     if event == "SPELL_AURA_APPLIED" then
 
 
-        -- Check if player received the effect
+        -- Did the effect hit the player?
 
         if destGUID == UnitGUID("player") then
 
+
+            -- Is it a tracked CC?
 
             if CrowdControl[spellName] then
 
@@ -108,12 +129,14 @@ local function CombatEvent()
 
                 if sourceName then
 
-                    message = message.." by "..sourceName
+                    message =
+                    message.." by "..sourceName
 
                 end
 
 
                 Announce(message)
+
 
             end
         end
@@ -121,8 +144,9 @@ local function CombatEvent()
 end
 
 
+
 ------------------------------------------------
--- Register Events
+-- Register Combat Events
 ------------------------------------------------
 
 EventFrame:RegisterEvent(
